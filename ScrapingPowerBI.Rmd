@@ -1,0 +1,91 @@
+---
+title: "Scraper"
+author: "Alex"
+date: "4/24/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+require(tidyverse)
+require(RSelenium)
+require(wdman) 
+require(xml2)
+require(selectr)
+```
+
+```{r}
+# Time to scrape! Using RSelenium because they have an annoying website architecture
+
+system("docker run -d -p 4445:4444 selenium/standalone-chrome:latest")
+
+remDr <- remoteDriver(remoteServerAddr = "192.168.99.100",
+                      browserName = "chrome",
+                      port = 4445L)
+remDr$open()
+
+
+remDr$navigate("https://app.powerbi.com/view?r=eyJrIjoiMjhjZDI2ZjUtNDNhNy00MDVkLWEwNjAtOWE3NWM1ZGQ0MGY0IiwidCI6Ijg1Y2VkZjg5LWUzNmItNDYzOS1iMmYwLTllYzZkOTU1ZGQ3ZiIsImMiOjl9")
+
+remDr$screenshot(TRUE)
+
+iframe1 = remDr$findElement(using = "xpath", "/html/body/div[1]/root/div/div/div[1]/div/div/div/exploration-container/exploration-container-modern/div/div/div/exploration-host/div/div/exploration/div/explore-canvas-modern/div/div[2]/div/div[2]/div[2]/visual-container-repeat/visual-container-modern[21]/transform/div/div[3]/div/visual-modern/div/iframe")
+
+iframe2 = remDr$findElement(using = "xpath", "/html/body/div[1]/root/div/div/div[1]/div/div/div/exploration-container/exploration-container-modern/div/div/div/exploration-host/div/div/exploration/div/explore-canvas-modern/div/div[2]/div/div[2]/div[2]/visual-container-repeat/visual-container-modern[22]/transform/div/div[3]/div/visual-modern/div/iframe")
+
+remDr$switchToFrame(iframe1)
+
+firstOption1 = remDr$findElement(using = "xpath", "/html/body/div/div/div[3]/div/div/div[1]/div/ul/li")
+
+firstOption1$clickElement()
+
+remDr$switchToFrame(NA)
+
+column1 = remDr$findElement(using = "xpath", "/html/body/div[1]/root/div/div/div[1]/div/div/div/exploration-container/exploration-container-modern/div/div/div/exploration-host/div/div/exploration/div/explore-canvas-modern/div/div[2]/div/div[2]/div[2]/visual-container-repeat/visual-container-modern[39]/transform/div/div[3]/div/visual-modern/div")
+
+column2 = remDr$findElement(using = "xpath", "/html/body/div[1]/root/div/div/div[1]/div/div/div/exploration-container/exploration-container-modern/div/div/div/exploration-host/div/div/exploration/div/explore-canvas-modern/div/div[2]/div/div[2]/div[2]/visual-container-repeat/visual-container-modern[37]/transform/div/div[3]/div/visual-modern/div")
+
+remDr$mouseMoveToLocation(webElement = column1)
+
+remDr$click(buttonId = 2)
+
+remDr$sendKeysToActiveElement(key = "down_arrow")
+
+firstOption2 = remDr$findElement(using = "xpath", "/html/body/div/div/div[3]/div/div/div[2]/div/ul/li")
+
+remDr$switchToFrame(iframe2)
+
+secondOption1 = remDr$findElement(using = "xpath", "/html/body/div/div/div[3]/div/div/div[1]/div/ul/li")
+
+secondOption2 = remDr$findElement(using = "xpath", "/html/body/div/div/div[3]/div/div/div[2]/div/ul/li")
+
+
+
+a
+
+option <- remDr$findElement(using = 'xpath', "//*/option[@value = 'audi']")
+
+
+
+  
+
+link = webElem$getElementAttribute('href')
+  remDr$navigate(link[[1]])
+  webElem = remDr$findElement(using = "xpath", "/html/body/div[1]/div[3]/table/tbody/tr[4]/td/table/tbody/tr[1]/td[5]/font")
+  stateid = webElem$getElementText()
+  participant.schools$stateid[n] = stateid
+  webElem = remDr$findElement(using = "xpath", "/html/body/div[1]/div[3]/table/tbody/tr[4]/td/table/tbody/tr[1]/td[3]/font")
+  ncesid = webElem$getElementText()
+  participant.schools$ncesid[n] = ncesid
+  webElem = remDr$findElement(using = "xpath", "/html/body/div[1]/div[3]/table/tbody/tr[4]/td/table/tbody/tr[1]/td[1]/font[2]")
+  name = webElem$getElementText()
+  participant.schools$name[n] = name
+  webElem = remDr$findElement(using = "xpath", "/html/body/div[1]/div[3]/table/tbody/tr[4]/td/table/tbody/tr[5]/td[1]/font")
+  address = webElem$getElementText()
+  participant.schools$address[n] = address
+
+```
+
